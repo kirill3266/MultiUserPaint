@@ -1,5 +1,7 @@
 # multipaint
 
+![example1](image/img.png)
+
 ### Компиляция и создание JAR-файла
 mvn package
 
