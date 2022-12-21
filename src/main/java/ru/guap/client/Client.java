@@ -10,7 +10,7 @@ import java.awt.event.*;
 public class Client {
     // ПЕРЕМЕННЫЕ СЕТИ
     boolean isConnected = false;
-    String serverHost = null;
+    InetAddress serverHost = null;
     int serverPort;
     Socket clientSocket;
     BufferedReader readSocket;
@@ -118,7 +118,7 @@ public class Client {
         }
     }
 
-    public Client(String serverHost, int serverPort) {
+    public Client(InetAddress serverHost, int serverPort) {
         // СЕТЬ
         try {
             try {

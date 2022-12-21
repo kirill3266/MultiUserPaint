@@ -170,12 +170,12 @@ public class Server {
 
     }
 
-    public Server() {
+    public Server(int listeningPort) {
         boards = new HashMap<String, BufferedImage>();
         clients = new ArrayList<ClientThread>();
         consoleSynch = new Object();
         try {
-            serverSocket = new ServerSocket(0);
+            serverSocket = new ServerSocket(listeningPort);
             System.out.println("PORT: " + serverSocket.getLocalPort());
             while (true) {
                 ClientThread newClient = new ClientThread(serverSocket.accept());
