@@ -341,11 +341,10 @@ public class Client {
         chooser.setOpaque(false);
         chooser.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                mainColor = JColorChooser.showDialog(null, "Choose a color", Color.WHITE);
+                mainColor = JColorChooser.showDialog(null, "Choose a color", mainColor);
             }
         });
         toolbar.add(chooser);
-
 
         // ЗАЛИВКА
         JButton filling = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("Заливка.png")));
@@ -358,6 +357,24 @@ public class Client {
                 graphics.setColor(mainColor);
                 graphics.fillRect(0, 0, 800, 600);
                 boardPanel.repaint();
+                try {
+                    try {
+                        for (int x = 0;x<800;++x) {
+                            for (int y = 0; y<600;++y) {
+                                String message = mainColor.getRGB() + " " + x + " " + y
+                                        + " " + size;
+                                writeSocket.write(message + "\n");
+                                writeSocket.flush();
+                            }
+                        }
+                    } catch (IOException err) {
+                        System.out.println(err);
+                        readSocket.close();
+                        writeSocket.close();
+                    }
+                } catch (IOException err) {
+                    System.out.println(err);
+                }
             }
         });
         toolbar.add(filling);
