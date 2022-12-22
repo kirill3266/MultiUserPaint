@@ -37,6 +37,7 @@ public class Client {
         }
     }
 
+
     /*************************************
      * КЛАСС СЧИТЫВАНИЕ ДАННЫХ ОТ СЕРВЕРА
      *************************************/
@@ -108,12 +109,12 @@ public class Client {
                         }
                     }
                 } catch (IOException err) {
-                    System.out.println(err.toString());
+                    System.out.println(err);
                     readSocket.close();
                     writeSocket.close();
                 }
             } catch (IOException err) {
-                System.out.println(err.toString());
+                System.out.println(err);
             }
         }
     }
@@ -129,12 +130,12 @@ public class Client {
                 writeSocket = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                 new NetDraw();
             } catch (IOException err) {
-                System.out.println(err.toString());
+                System.out.println(err);
                 readSocket.close();
                 writeSocket.close();
             }
         } catch (IOException err) {
-            System.out.println(err.toString());
+            System.out.println(err);
         }
 
         // ГРАФИКА
@@ -185,8 +186,7 @@ public class Client {
         menu.add(textField);
 
         // СОЗДАТЬ ДОСКУ
-        JButton createBoard = new JButton(
-                new ImageIcon(this.getClass().getClassLoader().getResource("createBoard.png")));
+        JButton createBoard = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("createBoard.png")));
         createBoard.setBounds(225, 40, 210, 40); // размещение
         createBoard.setBorderPainted(false); // не рисовать рамку
         createBoard.setBackground(Color.lightGray); // цвет фона (убирает градиент при наведении)
@@ -215,12 +215,12 @@ public class Client {
                         writeSocket.write("CREATE " + nameBoard + "\n");
                         writeSocket.flush();
                     } catch (IOException err) {
-                        System.out.println(err.toString());
+                        System.out.println(err);
                         readSocket.close();
                         writeSocket.close();
                     }
                 } catch (IOException err) {
-                    System.out.println(err.toString());
+                    System.out.println(err);
                 }
             }
         });
@@ -258,12 +258,12 @@ public class Client {
                         writeSocket.write("CONNECT " + nameBoard + "\n");
                         writeSocket.flush();
                     } catch (IOException err) {
-                        System.out.println(err.toString());
+                        System.out.println(err);
                         readSocket.close();
                         writeSocket.close();
                     }
                 } catch (IOException err) {
-                    System.out.println(err.toString());
+                    System.out.println(err);
                 }
             }
         });
@@ -277,7 +277,7 @@ public class Client {
         toolbar.setLayout(null); // элементы размещаем сами
         toolbar.setFloatable(false); // нельзя перетаскивать
         toolbar.setBorderPainted(false); // без рамок
-        toolbar.setBackground(mainColor); // устанавливаем цвет панели
+        toolbar.setBackground(Color.gray); // устанавливаем цвет панели
         frame.add(toolbar);
 
         // МЕНЮ
@@ -303,192 +303,87 @@ public class Client {
         });
         toolbar.add(menuButton);
 
-        // РАЗМЕР 10
-        JButton size4Button = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("size10.png")));
-        size4Button.setBounds(0, 40, 40, 40);
-        size4Button.setBorderPainted(false);
-        size4Button.setBackground(Color.lightGray);
-        size4Button.setOpaque(false);
-        size4Button.addActionListener(new ActionListener() {
+        // Смена размера
+        JButton sizeButton = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("size10.png")));
+        sizeButton.setBounds(0, 40, 40, 40);
+        sizeButton.setBorderPainted(false);
+        sizeButton.setBackground(Color.lightGray);
+        sizeButton.setOpaque(false);
+        sizeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                size = 10;
+                switch (size) {
+                    case 10:
+                        size = 20;
+                        sizeButton.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("size20.png")));
+                        break;
+                    case 20:
+                        size = 40;
+                        sizeButton.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("size40.png")));
+                        break;
+                    case 40:
+                        size = 80;
+                        sizeButton.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("size80.png")));
+                        break;
+                    case 80:
+                        size = 10;
+                        sizeButton.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("size10.png")));
+                        break;
+                }
             }
         });
-        toolbar.add(size4Button);
+        toolbar.add(sizeButton);
 
-        // РАЗМЕР 20
-        JButton size10Button = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("size20.png")));
-        size10Button.setBounds(0, 80, 40, 40);
-        size10Button.setBorderPainted(false);
-        size10Button.setBackground(Color.lightGray);
-        size10Button.setOpaque(false);
-        size10Button.addActionListener(new ActionListener() {
+        // ВЫБОР ЦВЕТА
+        JButton chooser = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("Палитра.png")));
+        chooser.setBounds(0, 80, 40, 40);
+        chooser.setBorderPainted(false);
+        chooser.setBackground(Color.lightGray);
+        chooser.setOpaque(false);
+        chooser.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                size = 20;
+                mainColor = JColorChooser.showDialog(null, "Choose a color", Color.WHITE);
             }
         });
-        toolbar.add(size10Button);
+        toolbar.add(chooser);
 
-        // РАЗМЕР 40
-        JButton size20Button = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("size40.png")));
-        size20Button.setBounds(0, 120, 40, 40);
-        size20Button.setBorderPainted(false);
-        size20Button.setBackground(Color.lightGray);
-        size20Button.setOpaque(false);
-        size20Button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                size = 40;
-            }
-        });
-        toolbar.add(size20Button);
 
-        // РАЗМЕР 80
-        JButton size30Button = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("size80.png")));
-        size30Button.setBounds(0, 160, 40, 40);
-        size30Button.setBorderPainted(false);
-        size30Button.setBackground(Color.lightGray);
-        size30Button.setOpaque(false);
-        size30Button.addActionListener(new ActionListener() {
+        // ЗАЛИВКА
+        JButton filling = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("Заливка.png")));
+        filling.setBounds(0, 120, 40, 40);
+        filling.setBorderPainted(false);
+        filling.setBackground(Color.lightGray);
+        filling.setOpaque(false);
+        filling.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                size = 80;
+                graphics.setColor(mainColor);
+                graphics.fillRect(0, 0, 800, 600);
+                boardPanel.repaint();
             }
         });
-        toolbar.add(size30Button);
+        toolbar.add(filling);
 
-        // ЦВЕТ БЕЛЫЙ
-        JButton whiteButton = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("white.png")));
-        whiteButton.setBounds(0, 240, 40, 40);
-        whiteButton.setBorderPainted(false);
-        whiteButton.setBackground(Color.lightGray);
-        whiteButton.setOpaque(false);
-        whiteButton.addActionListener(new ActionListener() {
+        // Смена темы
+        JButton theme = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("Тема-белая.png")));
+        theme.setBounds(0, 160, 40, 40);
+        theme.setBorderPainted(false);
+        theme.setBackground(Color.lightGray);
+        theme.setOpaque(false);
+        theme.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                mainColor = Color.white;
-                toolbar.setBackground(mainColor);
-                menu.setBackground(mainColor);
+                if (menu.getBackground() == Color.white) {
+                    menu.setBackground(Color.black);
+                    toolbar.setBackground(Color.magenta);
+                    theme.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("Тема-тёмная.png")));
+                    frame.setBackground(Color.black);
+                } else {
+                    menu.setBackground(Color.white);
+                    toolbar.setBackground(Color.gray);
+                    theme.setIcon(new ImageIcon(this.getClass().getClassLoader().getResource("Тема-белая.png")));
+                    frame.setBackground(Color.white);
+                }
             }
         });
-        toolbar.add(whiteButton);
-
-        // ЦВЕТ ЧЕРНЫЙ
-        JButton blackButton = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("black.png")));
-        blackButton.setBounds(0, 280, 40, 40);
-        blackButton.setBorderPainted(false);
-        blackButton.setBackground(Color.lightGray);
-        blackButton.setOpaque(false);
-        blackButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                mainColor = Color.black;
-                toolbar.setBackground(mainColor);
-                menu.setBackground(mainColor);
-            }
-        });
-        toolbar.add(blackButton);
-
-        // ЦВЕТ КРАСНЫЙ
-        JButton redButton = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("red.png")));
-        redButton.setBounds(0, 320, 40, 40);
-        redButton.setBorderPainted(false);
-        redButton.setBackground(Color.lightGray);
-        redButton.setOpaque(false);
-        redButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                mainColor = Color.red;
-                toolbar.setBackground(mainColor);
-                menu.setBackground(mainColor);
-            }
-        });
-        toolbar.add(redButton);
-
-        // ЦВЕТ ОРАНЖЕВЫЙ
-        JButton orangeButton = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("orange.png")));
-        orangeButton.setBounds(0, 360, 40, 40);
-        orangeButton.setBorderPainted(false);
-        orangeButton.setBackground(Color.lightGray);
-        orangeButton.setOpaque(false);
-        orangeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                mainColor = Color.orange;
-                toolbar.setBackground(mainColor);
-                menu.setBackground(mainColor);
-            }
-        });
-        toolbar.add(orangeButton);
-
-        // ЦВЕТ ЖЕЛТЫЙ
-        JButton yellowButton = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("yellow.png")));
-        yellowButton.setBounds(0, 400, 40, 40);
-        yellowButton.setBorderPainted(false);
-        yellowButton.setBackground(Color.lightGray);
-        yellowButton.setOpaque(false);
-        yellowButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                mainColor = Color.yellow;
-                toolbar.setBackground(mainColor);
-                menu.setBackground(mainColor);
-            }
-        });
-        toolbar.add(yellowButton);
-
-        // ЦВЕТ ЗЕЛЕНЫЙ
-        JButton greenButton = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("green.png")));
-        greenButton.setBounds(0, 440, 40, 40);
-        greenButton.setBorderPainted(false);
-        greenButton.setBackground(Color.lightGray);
-        greenButton.setOpaque(false);
-        greenButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                mainColor = Color.green;
-                toolbar.setBackground(mainColor);
-                menu.setBackground(mainColor);
-            }
-        });
-        toolbar.add(greenButton);
-
-        // ЦВЕТ ГОЛУБОЙ
-        JButton cyanButton = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("cyan.png")));
-        cyanButton.setBounds(0, 480, 40, 40);
-        cyanButton.setBorderPainted(false);
-        cyanButton.setBackground(Color.lightGray);
-        cyanButton.setOpaque(false);
-        cyanButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                mainColor = Color.cyan;
-                toolbar.setBackground(mainColor);
-                menu.setBackground(mainColor);
-            }
-        });
-        toolbar.add(cyanButton);
-
-        // ЦВЕТ СИНИЙ
-        JButton blueButton = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("blue.png")));
-        blueButton.setBounds(0, 520, 40, 40);
-        blueButton.setBorderPainted(false);
-        blueButton.setBackground(Color.lightGray);
-        blueButton.setOpaque(false);
-        blueButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                mainColor = Color.blue;
-                toolbar.setBackground(mainColor);
-                menu.setBackground(mainColor);
-            }
-        });
-        toolbar.add(blueButton);
-
-        // ЦВЕТ ФИОЛЕТОВЫЙ
-        JButton magentaButton = new JButton(new ImageIcon(this.getClass().getClassLoader().getResource("magenta.png")));
-        magentaButton.setBounds(0, 560, 40, 40);
-        magentaButton.setBorderPainted(false);
-        magentaButton.setBackground(Color.lightGray);
-        magentaButton.setOpaque(false);
-        magentaButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                mainColor = Color.magenta;
-                toolbar.setBackground(mainColor);
-                menu.setBackground(mainColor);
-            }
-        });
-        toolbar.add(magentaButton);
+        toolbar.add(theme);
 
         // ***********
         // СЛУШАТЕЛИ
@@ -502,12 +397,12 @@ public class Client {
                         writeSocket.write(message + "\n");
                         writeSocket.flush();
                     } catch (IOException err) {
-                        System.out.println(err.toString());
+                        System.out.println(err);
                         readSocket.close();
                         writeSocket.close();
                     }
                 } catch (IOException err) {
-                    System.out.println(err.toString());
+                    System.out.println(err);
                 }
 
             }
@@ -522,12 +417,12 @@ public class Client {
                         writeSocket.write(message + "\n");
                         writeSocket.flush();
                     } catch (IOException err) {
-                        System.out.println(err.toString());
+                        System.out.println(err);
                         readSocket.close();
                         writeSocket.close();
                     }
                 } catch (IOException err) {
-                    System.out.println(err.toString());
+                    System.out.println(err);
                 }
             }
         });
